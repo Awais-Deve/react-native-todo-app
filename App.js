@@ -14,11 +14,15 @@ import GoalItem from "./components/GoalItem";
 export default function App() {
   const [text, setText] = useState("");
   const [goals, setGoals] = useState([]);
+  const [doShowCreateGoalModal, setDoShowCreateGoalModal] = useState(false);
 
+  // Handlers
   function handleChangeOnTextInput(text) {
     setText(text);
   }
   function handlePressOnAddGoalButton() {
+    if(!text) return;
+
     setGoals((prev) => [
       ...prev,
       {
@@ -27,20 +31,30 @@ export default function App() {
       },
     ]);
     setText("");
+    setDoShowCreateGoalModal(false);
   }
   function deleteItem(id) {
     setGoals((prev) => prev.filter((g) => g.id !== id));
   }
-
+  function handlePressOnCancelButton() {
+    setDoShowCreateGoalModal(false);
+    if(text) setText("");
+  }
+  function handlePressOnAddNewGoalButton() {
+    setDoShowCreateGoalModal(true);
+  }
   return (
     <View style={styles.container}>
-      <GoalInput
-        handleChangeOnTextInput={handleChangeOnTextInput}
-        handlePressOnAddGoalButton={handlePressOnAddGoalButton}
-        value={text}
-      />
+      <View style={styles.addButtonContainer}>
+        <Button
+          title="Add New Goal"
+          color="purple"
+          onPress={handlePressOnAddNewGoalButton}
+        />
+      </View>
 
       <View style={styles.listItemsContainer}>
+        <Text style={styles.goalsHeading}>All Goals</Text>
         <FlatList
           data={goals}
           renderItem={(props) => (
@@ -53,6 +67,14 @@ export default function App() {
           keyExtractor={(item) => item.id}
         />
       </View>
+
+      <GoalInput
+        handleChangeOnTextInput={handleChangeOnTextInput}
+        handlePressOnAddGoalButton={handlePressOnAddGoalButton}
+        handlePressOnCancelButton={handlePressOnCancelButton}
+        value={text}
+        doShowModal={doShowCreateGoalModal}
+      />
     </View>
   );
 }
@@ -63,9 +85,20 @@ const styles = StyleSheet.create({
     paddingTop: 68,
     paddingHorizontal: 24,
   },
-
+  addButtonContainer: {
+    borderBottomWidth: 1,
+    borderBottomColor: "black",
+    paddingBottom: 32,
+  },
   listItemsContainer: {
     paddingVertical: 24,
     flex: 1,
   },
+  goalsHeading:{
+    textAlign: "center",
+    fontSize: 28,
+    fontWeight: "bold",
+    textTransform: "uppercase",
+    marginBottom:20
+  }
 });

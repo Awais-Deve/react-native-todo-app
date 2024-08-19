@@ -1,10 +1,8 @@
 import { Text, StyleSheet, Pressable, View } from "react-native";
 
-function GoalItem({ text,onItemPress,id }) {
+function GoalItem({ text, onItemPress, id }) {
   return (
-    <Pressable
-    onPress={()=>onItemPress(id)}
-    >
+    <Pressable onPress={() => onItemPress(id)}>
       {({ pressed }) => (
         <Text
           style={{
@@ -23,7 +21,7 @@ export default GoalItem;
 
 const styles = StyleSheet.create({
   item: {
-    color:"white",
+    color: "white",
     borderRadius: 4,
     padding: 8,
     marginBottom: 12,
